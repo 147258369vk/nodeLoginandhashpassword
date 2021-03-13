@@ -46,7 +46,7 @@ module.exports.userProfile=(req,res)=>{
         return res.status(200).json({
             success:true,
             message:'user Found',
-            data:_.pick(user,['email'])
+            data:_.pick(user,['_id','email'])
         })
     }).catch((err)=>{
         res.status(404).json({
@@ -55,4 +55,20 @@ module.exports.userProfile=(req,res)=>{
             err:err.message
         })
     })
+}
+
+module.exports.selectedUser=(req,res)=>{
+  return User.findById({_id:req.params.id}).select('name email contact').then((docs)=>{
+    res.status(200).json({
+      success:true,
+      messasge:'User Record Found',
+      data:docs
+    })
+  }).catch((err)=>{
+    res.status(401).json({
+      success:false,
+      message:'User not found',
+      err:err.message
+    })
+  })
 }
